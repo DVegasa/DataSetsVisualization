@@ -13,4 +13,8 @@ class VisualizationView(context: Context) : View(context) {
         super.onDraw(canvas)
 
     }
+
+    fun visualize(list: List<PixelData>) {
+        
+    }
 }

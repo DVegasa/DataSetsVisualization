@@ -9,7 +9,7 @@ import java.net.URL
  */
 class DataLoader {
 
-    val handler = Handler()
+    private val handler = Handler()
 
     fun loadFromMyGithub(fileName: String, cb: Callback) {
         val url = "https://raw.githubusercontent.com/DVegasa/sandbox_datasets/master/$fileName"
@@ -17,14 +17,12 @@ class DataLoader {
         Thread(Runnable {
             try {
                 dataset = URL(url).readText()
+
             } catch (ex: FileNotFoundException) {
-                cb.error(ex)
+                handler.post { cb.error(ex) }
                 return@Runnable
             }
-
-            handler.post {
-                cb.downloaded(dataset)
-            }
+            handler.post { cb.downloaded(dataset) }
 
         }).start()
     }
