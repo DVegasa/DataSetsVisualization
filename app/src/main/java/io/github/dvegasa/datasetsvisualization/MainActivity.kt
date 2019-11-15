@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         visEngine = VisualizationEngine(visView)
 
         btnGo.setOnClickListener {
+            btnGo.isEnabled = false
+            btnGo.isClickable = false
             setStatus("Загрузка начата...")
             startDownloading()
         }
@@ -43,6 +45,8 @@ class MainActivity : AppCompatActivity() {
             object : DataLoader.Callback {
 
                 override fun error(ex: Exception) {
+                    btnGo.isEnabled = true
+                    btnGo.isClickable = true
                     when (ex) {
                         is FileNotFoundException -> setStatus("Файл не найден")
                         else -> {
@@ -68,6 +72,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun done(list: List<PixelData>) {
+                btnGo.isEnabled = true
+                btnGo.isClickable = true
                 setStatus("Перевод закончен ($datasetSize элементов)")
                 parsedList = list as ArrayList<PixelData>
                 visEngine?.visualize(parsedList)

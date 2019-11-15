@@ -29,8 +29,8 @@ class VisualizationEngine(
             style = Paint.Style.FILL
         }
 
-        val c1 = 0xA4036FL // outside color
-        val c2 = 0x48AABFL // inside color
+        val c1 = 0x00FFFFL // outside color
+        val c2 = 0xFF0000L // inside color
 
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
         bitmap.eraseColor(Color.WHITE)
