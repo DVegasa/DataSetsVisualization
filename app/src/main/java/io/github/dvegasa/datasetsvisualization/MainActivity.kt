@@ -18,27 +18,33 @@ class MainActivity : AppCompatActivity() {
         VisualizationView(this)
     }
 
+    private var visEngine: VisualizationEngine? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         flVisualizationViewHolder.addView(visView)
+        visEngine = VisualizationEngine(visView)
 
         btnGo.setOnClickListener {
             setStatus("Загрузка начата...")
             startDownloading()
         }
+
+        btnClear.setOnClickListener {
+            visEngine?.clear()
+        }
     }
 
     private fun startDownloading() {
         dataLoader.loadFromMyGithub(
-            etFileNameInput.text.toString().trim(), object : DataLoader.Callback {
+            etFileNameInput.text.toString().trim(),
+            object : DataLoader.Callback {
 
                 override fun error(ex: Exception) {
                     when (ex) {
-
                         is FileNotFoundException -> setStatus("Файл не найден")
-
                         else -> {
                             setStatus("Неизвестная ошибка")
                             ex.printStackTrace()
@@ -54,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleDataset(dataset: String) {
-        val parsedList = ArrayList<PixelData>()
+        var parsedList: ArrayList<PixelData>
 
         converter.toPixelData(dataset, object : DatasetConverter.StatusCallback {
             override fun updateStatus(computed: Int) {
@@ -63,10 +69,11 @@ class MainActivity : AppCompatActivity() {
 
             override fun done(list: List<PixelData>) {
                 setStatus("Перевод закончен ($datasetSize элементов)")
+                parsedList = list as ArrayList<PixelData>
+                visEngine?.visualize(parsedList)
             }
         })
 
-        visView.visualize(parsedList)
     }
 
     fun setStatus(status: String) {

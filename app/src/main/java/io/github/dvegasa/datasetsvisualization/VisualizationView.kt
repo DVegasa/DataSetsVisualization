@@ -1,6 +1,7 @@
 package io.github.dvegasa.datasetsvisualization
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.view.View
 
@@ -9,12 +10,20 @@ import android.view.View
  */
 class VisualizationView(context: Context) : View(context) {
 
+    private var bitmap: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565)
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
+        canvas?.drawBitmap(bitmap, 0f, 0f, null)
     }
 
-    fun visualize(list: List<PixelData>) {
-        
+    fun visualize(bitmapData: Bitmap) {
+        bitmap = bitmapData
+        invalidate()
+    }
+
+    fun clear() {
+        bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565)
+        invalidate()
     }
 }
